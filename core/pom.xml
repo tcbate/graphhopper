@@ -141,19 +141,6 @@
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
                     <version>LATEST</version>
-                    <configuration>
-                        <!-- no longer required -->
-                        <targetClasses>
-                            <param>com.graphhopper.util.GHUtility*</param>
-                            <param>com.graphhopper.util.StopWatch*</param>
-                            </targetClasses>
-                    </configuration>
-                </plugin>
-                <!-- create jar with test classes to be reused in other projects -->
-                <plugin>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-maven</artifactId>
-                    <version>LATEST</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.pitest</groupId>
@@ -164,11 +151,16 @@
                     <configuration>
                         <!-- no longer required -->
                         <targetClasses>
-                            <param>com.graphhopper.util.GHUtility*</param>
-                            <param>com.graphhopper.util.StopWatch*</param>
+                            <param>com.graphhopper.util.GHUtility</param>
+                            <!--<param>com.graphhopper.util.StopWatch*</param> -->
+                            <!--<param>com.graphhopper.routing*</param> -->
                         </targetClasses>
+                        <targetTests>
+                            <param>com.graphhopper.util.GHUtilityTest</param>
+                        </targetTests>
                     </configuration>
                 </plugin>
+                <!-- create jar with test classes to be reused in other projects -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
