@@ -89,21 +89,33 @@ mergedOrSplitWay()
 
 
 7. Test : testComparePathsWithDifferentWeightsShouldFail
-    Intention : Vérifier qu'une AssertionError est levée si les poids des chemins sont trop différents.
+
+   Intention : Vérifier qu'une AssertionError est levée si les poids des chemins sont trop différents.
+   
     Données : Un chemin avec un poids de 100.0 et un autre de 101.1. La différence est volontairement grande pour garantir l'échec.
+   
     Oracle : Le test s'attend à ce qu'une exception de type AssertionError soit lancée.
    
 8. Test : testComparePathsWithDifferentDistanceShouldReturnViolation
+   
     Intention : S'assurer qu'une différence de distance est signalée, même si les poids sont identiques.
+   
     Données : Deux chemins identiques en tout point, sauf la distance (50.0 vs 50.2).
+   
     Oracle : Le test vérifie que la méthode retourne une liste d'erreurs contenant le message "wrong distance".
    
 9. Test : testComparePathsWithEquivalentDetourShouldReturnNoViolations
+ 
     Intention : Valider que la méthode considère deux chemins comme identiques si leur seule différence est un détour attendu (via).
+    
     Données : Un chemin direct A->C et un chemin A->B->C. Le nœud B est spécifié comme un détour valide.
+    
     Oracle : Le test s'attend à ce que la liste des erreurs retournée soit vide, confirmant que le détour a été accepté.
     
 10. Test : testComparePathsWithFakerGeneratedWeights
-    Intention : Confirmer que des poids très similaires (différence inférieure à la tolérance) ne causent pas d'erreur.
+
+     Intention : Confirmer que des poids très similaires (différence inférieure à la tolérance) ne causent pas d'erreur.
+    
     Données : Faker génère un poids de base et une différence minime, garantie d'être dans la marge de tolérance de la méthode.
+    
     Oracle : Le test vérifie que la liste des erreurs est vide, prouvant que la tolérance de la méthode fonctionne comme prévu.
