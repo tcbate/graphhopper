@@ -17,15 +17,30 @@
  */
 package com.graphhopper.util;
 
+import com.graphhopper.GraphHopperConfig;
 import com.graphhopper.coll.GHIntLongHashMap;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.graphhopper.routing.Path;
+import com.graphhopper.routing.ev.DecimalEncodedValue;
+import com.graphhopper.routing.ev.VehicleSpeed;
+import com.graphhopper.routing.util.EncodingManager;
+import com.graphhopper.storage.BaseGraph;
+import com.graphhopper.storage.Graph;
+import com.graphhopper.storage.NodeAccess;
+import org.junit.jupiter.api.BeforeEach;
+
+import java.util.List;
 
 /**
  * @author Peter Karich
  */
 public class GHUtilityTest {
+    
+    private Graph graph;
 
     @Test
     public void testEdgeStuff() {
@@ -64,4 +79,122 @@ public class GHUtilityTest {
 //        assertEquals(1, map2.get(2));
 //        assertEquals(-1, map2.get(3));
     }
+
+    @BeforeEach
+    public void setup() {
+        // initialiser EncodingManagerobligatoire pour BaseGraph
+        DecimalEncodedValue carSpeedEnc = VehicleSpeed.create("car", 5, 5, true);
+        EncodingManager em = new EncodingManager.Builder().add(carSpeedEnc).build();
+        
+        // Création du BaseGraph
+        graph = new BaseGraph.Builder(em).create(); 
+        
+        //  Initialisation des noeuds utilisés dans les tests (0, 1, 2, 3)
+        NodeAccess na = graph.getNodeAccess();
+        na.setNode(0, 0.0, 0.0);
+        na.setNode(1, 0.001, 0.0);
+        na.setNode(2, 0.002, 0.0);
+        na.setNode(3, 0.003, 0.0);
+    }
+
+    @Test
+    public void testComparePathsWithDifferentWeightsShouldFail() {
+        //  two paths with a big weight difference (> 1.e-2).
+        Path path1 = new Path(graph);
+        path1.setFound(true);
+        path1.setWeight(100.0);
+
+        Path path2 = new Path(graph);
+        path2.setFound(true);
+        path2.setWeight(101.1); // Weight difference is 1.1
+
+        // Expect an AssertionError due to the large weight difference
+        assertThrows(AssertionError.class, () -> {
+            GHUtility.comparePaths(path1, path2, 0, 1, 0);
+        }, "AssertionError expected for large weight discrepancy.");
+    }
+
+    @Disabled
+    public void testComparePathsWithDifferentNodeSequenceShouldReturnViolation() {
+        // two paths with identical weight/distance but different node sequences
+        Path path1 = new Path(graph);
+        path1.setFound(true);
+        path1.setWeight(100.0);
+        path1.setDistance(100.0);
+        path1.calcNodes().add(0); // Node 0
+        path1.calcNodes().add(1); // Node 1
+        path1.calcNodes().add(3); // Node 3
+
+        Path path2 = new Path(graph);
+        path2.setFound(true);
+        path2.setWeight(100.0);
+        path2.setDistance(100.0);
+        path2.calcNodes().add(0); // Node 0
+        path2.calcNodes().add(2); // Node 2 (Different node sequence)
+        path2.calcNodes().add(3); // Node 3
+
+        // Execute comparison and get the list of violations.
+        List<String> violations = GHUtility.comparePaths(path1, path2, 0, 3, 0);
+
+        // Verify a wrong nodes violation was reported.
+        assertFalse(violations.isEmpty(), "Violation list must not be empty for different nodes.");
+        assertTrue(violations.get(0).contains("wrong nodes"),
+            "Violation must concern the incorrect node sequence.");
+    }
+    @Test
+    public void testComparePathsWithDifferentDistanceShouldReturnViolation() {
+        //  two paths with identical weights/nodes, but distances little  different (> 0.1).
+        Path path1 = new Path(graph);
+        path1.setFound(true);
+        path1.setWeight(100.0);
+        path1.setDistance(50.0);
+        path1.calcNodes().add(0);
+        path1.calcNodes().add(1);
+        
+        Path path2 = new Path(graph);
+        path2.setFound(true);
+        path2.setWeight(100.0);
+        path2.setDistance(50.2); // Distance difference is 0.2 (> 0.1)
+        path2.calcNodes().add(0);
+        path2.calcNodes().add(1);
+        
+        // Execute comparison
+        List<String> violations = GHUtility.comparePaths(path1, path2, 0, 1, 0);
+
+        // Verify a wrong distance violation was reported.
+        assertFalse(violations.isEmpty(), "Violation list must not be empty for different distances.");
+        assertTrue(violations.get(0).contains("wrong distance"),
+            "Violation must concern the incorrect distance metric.");
+    }
+
+    @Test
+    void testComparePathsWithEquivalentDetourShouldReturnNoViolations() {
+        // Path1 is direct A->C. Path2 is equivalent detour A->B->C.
+        // test depends on the internal logic of pathsEqualExceptOneEdge()
+        
+        // Path 1: A -> C (direct)
+        Path path1 = new Path(graph);
+        path1.setFound(true);
+        path1.setWeight(50.0);
+        path1.setDistance(10.0);
+        path1.calcNodes().add(0); // A
+        path1.calcNodes().add(2); // C
+
+        // Path 2: A -> B -> C (detour)
+        Path path2 = new Path(graph);
+        path2.setFound(true);
+        path2.setWeight(50.0);
+        path2.setDistance(10.0);
+        path2.calcNodes().add(0); // A
+        path2.calcNodes().add(1); // B (detour node)
+        path2.calcNodes().add(2); // C
+
+        //  Compare paths. 
+        List<String> violations = GHUtility.comparePaths(path1, path2, 0, 2, 1); // From=0, To=2, Via=1
+
+        // Logic should recognize the detour as valid = in no violations.
+        assertTrue(violations.isEmpty(),
+            "No violation expected when a valid detour node (via) is accounted for.");
+    }
+
 }
