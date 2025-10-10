@@ -150,7 +150,7 @@
                     </dependencies>
                     <configuration>
                         <targetClasses>
-                            <param>com.graphhopper.core.util.GHUtility*</param>
+                            <param>com.graphhopper.util.GHUtility*</param>
                         </targetClasses>
                     </configuration>
                 </plugin>
