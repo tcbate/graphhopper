@@ -95,7 +95,7 @@ quand il ne trouve pas de lien entre les deux noeuds
 
    Mutants tués : Negated Conditional -> Memory Error
 
-
+### Tests sur `GHUtility.comparePaths(Path, Path, int, int, long)`
 
 7. Test : testComparePathsWithDifferentWeightsShouldFail
 
