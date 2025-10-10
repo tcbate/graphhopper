@@ -1,4 +1,81 @@
 # Rapport Tache 2 — IFT3913
+# Rapport Tache 2 — IFT3913
+
+Pour chaque test : 
+1. Nom du test
+2. Comportement testé
+3. Motivation des données des tests choisi
+4. Explication de l'oracle 
+
+### Tests sur `GHUtility.findCommonNode()`
+
+Pour chaqu'un de ces tests on utilise un graph qui est divisé en trois
+parites. (Ou un mockito à la place où la graph ne fonctionne pas pour
+ce qu'on veut tester)
+
+1. Nom : FindCommonNodeNormal
+
+   Comportement testé : Trouver le noeud commun entre deux noeud
+   connecté en forme d'étoille. 
+
+   Motivation des données des tests choisi: Cette test utilise une partie
+d'une graphe non-connexe en forme d'étoille. On test deux arrêts connecté
+au noeud du centre pour vérifier si le fonctionne rétrouve le bon noeud
+
+   Explication de l'oracle : On utilise un oracle direct qui est le noeud
+commun entre les deux dans le graph déjà construit
+
+2. Nom : FindCommonNodeDisconnected
+
+   Comportement testé : Lancer un exception si les deux noeuds ne sont
+pas connectés.
+
+   Motivation des données des tests choisi : On utilise une partie non-connexe
+du graphe pour provoquer l'exception
+
+   Explication de l'oracle : Un oracle direct — InvalidArgumentException est lancé
+quand il ne trouve pas de lien entre les deux noeuds
+
+3. Nom : FindCommonNodeCycle
+
+   Comportement Testé "Lancer un exception s'il y a un circle entre deux noeuds
+
+   Motivation des données : Une partie du graph avec deux noeuds et deux arrêts
+   entre les deux. Un qui point dand un direction et un qui point dans l'autre.
+   Cela crée une cycle entre les deux noeuds.
+
+   Explication de l'oracle : Un oracle direct - `InvalidArgumentException` est
+   lancé quand il trouve le cycle entre les deux noeuds
+
+4. Nom : FindCommonNodeChain
+   
+   Comportement testé : Trouvé le noeud commun dans une chaîne des noeuds/arrêts
+   
+   Motivation des données : Une sous-graphe avec trois noeuds et deux arrêts qui point
+   tous dans la même sens. (On peut donc passer par les deux arrêts pour atteindre le 
+   dernier noeud).
+
+   Explication de l'oracle : Un oracle direct - Le noeud touché par les deux arrêts dans
+   la chaîne
+
+5. Nom : MockedEdgeLoop1
+
+   Comportement testé : Lance une exception s'il y a une cycle entre deux noeuds
+
+   Motivation des données : Les données sont mocké pour ce test. IL y a un garde
+   lors de l'ajoute d'arrêt qui plant si on essaie de l'ajouter. On voulait tester
+   qu'est-ce qui arrivera si jamais ce genre de données rentre dans le graph. 
+
+   Explication de l'oracle : Un oracle direct — `InvalidArgumentException` si le
+   noeud sur les deux côtés sont le même noeud
+
+6. Nom : MockedEdgeLoop2
+   
+   Comportement testé : Idem pour le `MockedEdgeLoop1` mais on a simulé l'autre côté 
+   de l'arrêt par rapport à `MockedEdgeLoop1`
+
+   Explication de l'oracle : Un oracle direct – `InvalidArgumentException` si le
+   noeud sur les deux côtés sont le même noeud. 
 
 ### DirectionResolverResult.java
 pretty()
