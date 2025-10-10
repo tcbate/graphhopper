@@ -1,5 +1,4 @@
 # Rapport Tache 2 — IFT3913
-# Rapport Tache 2 — IFT3913
 
 
 # Pitest avant les test 
@@ -88,6 +87,26 @@ pretty()
 ### InstructionOutgoingEdges.java
 mergedOrSplitWay()
 
-test de syrine 
+
+7.Nom: testComparePathsWithDifferentWeightsShouldFail
+    Intention : Vérifier que la méthode lève une AssertionError lorsque les poids de deux chemins diffèrent au-delà de la tolérance permise.
+    Motivation des données : Nous avons choisi des poids de 100.0 et 101.1. La différence (1.1) est suffisamment grande pour ne laisser aucune ambiguïté et doit absolument       déclencher l'erreur. Les autres propriétés des chemins sont non pertinentes car cette vérification est prioritaire.
+    Oracle : Le comportement attendu, spécifié par une logique de comparaison stricte, est une exception. Le test réussit si un AssertionError.class est bien levé, ce que        nous validons avec assertThrows.
+    
+8.Nom : testComparePathsWithDifferentDistanceShouldReturnViolation
+    Intention : Valider que la méthode détecte une différence de distance, même si les poids et les séquences de nœuds sont identiques.
+    Motivation des données : Les poids et les nœuds sont identiques, mais les distances (50.0 vs 50.2) diffèrent d'une valeur supérieure à la tolérance habituelle. Ce test     cible la précision des comparaisons de nombres à virgule flottante.
+    Oracle : Similaire au test précédent, l'oracle attend une liste de violations non vide contenant le message spécifique "wrong distance".
+
+9.Nom : testComparePathsWithEquivalentDetourShouldReturnNoViolations
+    Intention : Vérifier que la méthode gère correctement le cas d'un détour "attendu". Deux chemins doivent être considérés comme équivalents si leur seule différence est     le passage par un nœud intermédiaire spécifié dans le paramètre via.
+    Motivation des données : Nous avons créé un chemin direct A->C (nœuds [0,2]) et un chemin alternatif A->B->C (nœuds [0,1,2]). Toutes les autres valeurs (poids,             distance) sont identiques pour isoler la logique de comparaison des nœuds. La clé du test est de passer le nœud 1 comme paramètre via, signalant au système que ce détour     est valide.
+    Oracle : L'oracle est basé sur la spécification de cette fonctionnalité avancée. Quand un détour valide est fourni, la méthode doit retourner une liste de violations        vide. Le test réussit donc si l'assertion assertTrue(violations.isEmpty()) est validée.
+10. Nom : testComparePathsWithFakerGeneratedWeights
+    Intention : Valider que la méthode comparePaths ne signale aucune violation lorsque les poids de deux chemins sont très similaires (c'est-à-dire que leur différence est     inférieure à la tolérance de 1.e-2), en utilisant des données variées générées par Faker.
+    Motivation des données : Plutôt que d'utiliser des valeurs fixes, nous utilisons Faker pour générer un poids de base réaliste et une très petite différence (garantie         d'être inférieure à la tolérance). Cela permet de vérifier que la logique de tolérance fonctionne correctement pour une large plage de valeurs et pas seulement pour         des nombres simples. La nature aléatoire (mais contrôlée) des données rend le test plus robuste.
+    Oracle : L'oracle stipule que, puisque la différence de poids est volontairement créée pour être dans la marge de tolérance de la méthode, aucun AssertionError ne doit        être levé, et comme les autres propriétés sont identiques, la liste des violations doit être vide. Le test réussit si assertTrue(violations.isEmpty()) est vrai.
+
+
 
 
