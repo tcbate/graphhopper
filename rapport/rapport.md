@@ -1,8 +1,11 @@
 # Rapport Tache 2 — IFT3913
 
 
-# Pitest avant les test 
+# Pitest avant les tests
 <img width="1455" height="541" alt="image" src="https://github.com/user-attachments/assets/8f164901-586d-4a5e-b4b2-cfb6a7fa2e1b" />
+
+# Pitest avant les tests
+<img width="1792" height="562" alt="image" src="https://github.com/user-attachments/assets/cbbc57c4-b486-4159-b5ad-4aa09b787078" />
 
 
 Pour chaque test : 
