@@ -1,22 +1,21 @@
 package com.graphhopper.util;
 
-import com.graphhopper.coll.GHIntLongHashMap;
 import com.graphhopper.routing.ev.EdgeIntAccess;
 import com.graphhopper.storage.BaseGraph;
 import com.graphhopper.storage.NodeAccess;
 import com.graphhopper.storage.RAMDirectory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class GHUtilityThomasTest{
+class GHUtilityThomasTest {
 
     RAMDirectory dir;
     BaseGraph bg;

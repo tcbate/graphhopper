@@ -149,15 +149,9 @@
                         </dependency>
                     </dependencies>
                     <configuration>
-                        <!-- no longer required -->
                         <targetClasses>
-                            <param>com.graphhopper.util.GHUtility</param>
-                            <!--<param>com.graphhopper.util.StopWatch*</param> -->
-                            <!--<param>com.graphhopper.routing*</param> -->
+                            <param>com.graphhopper.core.util.GHUtility*</param>
                         </targetClasses>
-                        <targetTests>
-                            <param>com.graphhopper.util.GHUtilityTest</param>
-                        </targetTests>
                     </configuration>
                 </plugin>
                 <!-- create jar with test classes to be reused in other projects -->
