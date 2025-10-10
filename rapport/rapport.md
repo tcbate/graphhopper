@@ -95,11 +95,6 @@ quand il ne trouve pas de lien entre les deux noeuds
 
    Mutants tués : Negated Conditional -> Memory Error
 
-### DirectionResolverResult.java
-pretty()
-
-### InstructionOutgoingEdges.java
-mergedOrSplitWay()
 
 
 7. Test : testComparePathsWithDifferentWeightsShouldFail
