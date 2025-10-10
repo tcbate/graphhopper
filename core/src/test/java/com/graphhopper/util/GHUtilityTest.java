@@ -17,10 +17,10 @@
  */
 package com.graphhopper.util;
 
+import com.github.javafaker.Faker;
 import com.graphhopper.GraphHopperConfig;
 import com.graphhopper.coll.GHIntLongHashMap;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -114,7 +114,7 @@ public class GHUtilityTest {
         }, "AssertionError expected for large weight discrepancy.");
     }
 
-    @Disabled
+    @Test
     public void testComparePathsWithDifferentNodeSequenceShouldReturnViolation() {
         // two paths with identical weight/distance but different node sequences
         Path path1 = new Path(graph);
@@ -196,5 +196,46 @@ public class GHUtilityTest {
         assertTrue(violations.isEmpty(),
             "No violation expected when a valid detour node (via) is accounted for.");
     }
+    @Test
+    public void testComparePathsWithFakerGeneratedWeights() {
+        // Verify that comparePaths has no violations if the weights are very similar
+        // (difference less than 1.e-2), even with Faker-generated data.
+        Faker faker = new Faker();
+
+        // Generate a random base weight between 1000 and 10000 (for a long path)
+
+        double minBase = 1000.0;
+        double maxBase = 10000.0;
+        double baseWeight = minBase + (maxBase - minBase) * faker.random().nextDouble();
+
+        // Generate a small difference less than the tolerance (1.e-2 = 0.01)
+        double minDiff = 0.0001; 
+        double maxDiff = 0.005;
+        double smallDiff = minDiff + (maxDiff - minDiff) * faker.random().nextDouble();
+
+        double weight1 = baseWeight;
+        double weight2 = baseWeight + smallDiff; // Almost identical weight
+
+        // Path 1 setup (Path 1 and 2 are identical in structure here)
+        Path path1 = new Path(graph);
+        path1.setFound(true);
+        path1.setWeight(weight1);
+        path1.calcNodes().add(0); 
+        path1.calcNodes().add(1);
+
+        // Path 2 setup
+        Path path2 = new Path(graph);
+        path2.setFound(true);
+        path2.setWeight(weight2);
+        path2.calcNodes().add(0);
+        path2.calcNodes().add(1);
+
+        // expect an empty list of violation 
+        List<String> violations = GHUtility.comparePaths(path1, path2, 0, 1, 0);
+
+        assertTrue(violations.isEmpty(), 
+            "No violation expected because weights (" + weight1 + " vs " + weight2 + 
+            ") are very similar and within the 1.e-2 tolerance. Violations: " + violations);
+        }
 
 }
