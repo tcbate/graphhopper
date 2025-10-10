@@ -29,6 +29,8 @@ au noeud du centre pour vérifier si le fonctionne rétrouve le bon noeud
    Explication de l'oracle : On utilise un oracle direct qui est le noeud
 commun entre les deux dans le graph déjà construit
 
+   Mutants tués : getCommonNode : negatedConditional -> MemoryError
+
 2. Nom : FindCommonNodeDisconnected
 
    Comportement testé : Lancer un exception si les deux noeuds ne sont
@@ -39,6 +41,8 @@ du graphe pour provoquer l'exception
 
    Explication de l'oracle : Un oracle direct — InvalidArgumentException est lancé
 quand il ne trouve pas de lien entre les deux noeuds
+
+   Mutants tués : Aucune
 
 3. Nom : FindCommonNodeCycle
 
@@ -51,6 +55,7 @@ quand il ne trouve pas de lien entre les deux noeuds
    Explication de l'oracle : Un oracle direct - `InvalidArgumentException` est
    lancé quand il trouve le cycle entre les deux noeuds
 
+   Mutents tués : Negated Conditional -> Memory Error (4x)
 4. Nom : FindCommonNodeChain
    
    Comportement testé : Trouvé le noeud commun dans une chaîne des noeuds/arrêts
@@ -60,7 +65,9 @@ quand il ne trouve pas de lien entre les deux noeuds
    dernier noeud).
 
    Explication de l'oracle : Un oracle direct - Le noeud touché par les deux arrêts dans
-   la chaîne
+   la chaîne 
+
+   Mutants tués : Negated conditional -> Memory Error (2x)
 
 5. Nom : MockedEdgeLoop1
 
@@ -73,6 +80,8 @@ quand il ne trouve pas de lien entre les deux noeuds
    Explication de l'oracle : Un oracle direct — `InvalidArgumentException` si le
    noeud sur les deux côtés sont le même noeud
 
+   Mutents tués : Negated Conditional -> Memory Error
+
 6. Nom : MockedEdgeLoop2
    
    Comportement testé : Idem pour le `MockedEdgeLoop1` mais on a simulé l'autre côté 
@@ -80,6 +89,8 @@ quand il ne trouve pas de lien entre les deux noeuds
 
    Explication de l'oracle : Un oracle direct – `InvalidArgumentException` si le
    noeud sur les deux côtés sont le même noeud. 
+
+   Mutants tués : Negated Conditional -> Memory Error
 
 ### DirectionResolverResult.java
 pretty()
