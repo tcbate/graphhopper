@@ -132,15 +132,16 @@ quand il ne trouve pas de lien entre les deux noeuds
     **Mutants Détectés**
 
     1. Mutant sur la Comparaison des Poids
-    Mutation : negated conditional (a inversé la condition du if).
+       Mutation : negated conditional (a inversé la condition du if).
 
-    Détecté par : testComparePathsWithDifferentWeightsShouldFail.
-    
-    Explication : La suite de tests originale ne vérifiait pas le cas où les poids sont très différents. Notre test force ce cas. Le mutant inversait la condition (>) du if qui compare les poids. Par conséquent, l'erreur attendue n'était pas levée, et notre test a échoué, tuant le mutant.
-    2. Mutant sur la Logique du Détour (via)
-    Mutation : removed call (a supprimé une partie de la logique).
+       Détecté par : testComparePathsWithDifferentWeightsShouldFail.
 
-    Détecté par : testComparePathsWithEquivalentDetourShouldReturnNoViolations.
-    
-    Explication : Cette fonctionnalité de détour n'était pas du tout testée. Le mutant supprimait la gestion de ce cas spécial. Notre test, qui est le seul à utiliser le paramètre via, s'attendait à ce que le détour soit accepté (pas d'erreur). Comme le mutant avait cassé cette logique, une erreur était retournée, et notre test a tué le mutant.
+       Explication : La suite de tests originale ne vérifiait pas le cas où les poids sont très différents. Notre test force ce cas. Le mutant inversait la condition(>)du if qui compare les poids. Par conséquent, l'erreur attendue n'était pas levée, et notre test a échoué, tuant le mutant.
+
+     3. Mutant sur la Logique du Détour (via)
+        Mutation : removed call (a supprimé une partie de la logique).
+
+        Détecté par : testComparePathsWithEquivalentDetourShouldReturnNoViolations.
+
+        Explication : Cette fonctionnalité de détour n'était pas du tout testée. Le mutant supprimait la gestion de ce cas spécial. Notre test, qui est le seul à utiliser le paramètre via, s'attendait à ce que le détour soit accepté (pas d'erreur). Comme le mutant avait cassé cette logique, une erreur était retournée, et notre test a tué le mutant.
     
