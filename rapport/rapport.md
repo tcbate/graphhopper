@@ -88,25 +88,22 @@ pretty()
 mergedOrSplitWay()
 
 
-7.Nom: testComparePathsWithDifferentWeightsShouldFail
-    Intention : Vérifier que la méthode lève une AssertionError lorsque les poids de deux chemins diffèrent au-delà de la tolérance permise.
-    Motivation des données : Nous avons choisi des poids de 100.0 et 101.1. La différence (1.1) est suffisamment grande pour ne laisser aucune ambiguïté et doit absolument       déclencher l'erreur. Les autres propriétés des chemins sont non pertinentes car cette vérification est prioritaire.
-    Oracle : Le comportement attendu, spécifié par une logique de comparaison stricte, est une exception. Le test réussit si un AssertionError.class est bien levé, ce que        nous validons avec assertThrows.
+7. Test : testComparePathsWithDifferentWeightsShouldFail
+    Intention : Vérifier qu'une AssertionError est levée si les poids des chemins sont trop différents.
+    Données : Un chemin avec un poids de 100.0 et un autre de 101.1. La différence est volontairement grande pour garantir l'échec.
+    Oracle : Le test s'attend à ce qu'une exception de type AssertionError soit lancée.
+   
+8. Test : testComparePathsWithDifferentDistanceShouldReturnViolation
+    Intention : S'assurer qu'une différence de distance est signalée, même si les poids sont identiques.
+    Données : Deux chemins identiques en tout point, sauf la distance (50.0 vs 50.2).
+    Oracle : Le test vérifie que la méthode retourne une liste d'erreurs contenant le message "wrong distance".
+   
+9. Test : testComparePathsWithEquivalentDetourShouldReturnNoViolations
+    Intention : Valider que la méthode considère deux chemins comme identiques si leur seule différence est un détour attendu (via).
+    Données : Un chemin direct A->C et un chemin A->B->C. Le nœud B est spécifié comme un détour valide.
+    Oracle : Le test s'attend à ce que la liste des erreurs retournée soit vide, confirmant que le détour a été accepté.
     
-8.Nom : testComparePathsWithDifferentDistanceShouldReturnViolation
-    Intention : Valider que la méthode détecte une différence de distance, même si les poids et les séquences de nœuds sont identiques.
-    Motivation des données : Les poids et les nœuds sont identiques, mais les distances (50.0 vs 50.2) diffèrent d'une valeur supérieure à la tolérance habituelle. Ce test     cible la précision des comparaisons de nombres à virgule flottante.
-    Oracle : Similaire au test précédent, l'oracle attend une liste de violations non vide contenant le message spécifique "wrong distance".
-
-9.Nom : testComparePathsWithEquivalentDetourShouldReturnNoViolations
-    Intention : Vérifier que la méthode gère correctement le cas d'un détour "attendu". Deux chemins doivent être considérés comme équivalents si leur seule différence est     le passage par un nœud intermédiaire spécifié dans le paramètre via.
-    Motivation des données : Nous avons créé un chemin direct A->C (nœuds [0,2]) et un chemin alternatif A->B->C (nœuds [0,1,2]). Toutes les autres valeurs (poids,             distance) sont identiques pour isoler la logique de comparaison des nœuds. La clé du test est de passer le nœud 1 comme paramètre via, signalant au système que ce détour     est valide.
-    Oracle : L'oracle est basé sur la spécification de cette fonctionnalité avancée. Quand un détour valide est fourni, la méthode doit retourner une liste de violations        vide. Le test réussit donc si l'assertion assertTrue(violations.isEmpty()) est validée.
-10. Nom : testComparePathsWithFakerGeneratedWeights
-    Intention : Valider que la méthode comparePaths ne signale aucune violation lorsque les poids de deux chemins sont très similaires (c'est-à-dire que leur différence est     inférieure à la tolérance de 1.e-2), en utilisant des données variées générées par Faker.
-    Motivation des données : Plutôt que d'utiliser des valeurs fixes, nous utilisons Faker pour générer un poids de base réaliste et une très petite différence (garantie         d'être inférieure à la tolérance). Cela permet de vérifier que la logique de tolérance fonctionne correctement pour une large plage de valeurs et pas seulement pour         des nombres simples. La nature aléatoire (mais contrôlée) des données rend le test plus robuste.
-    Oracle : L'oracle stipule que, puisque la différence de poids est volontairement créée pour être dans la marge de tolérance de la méthode, aucun AssertionError ne doit        être levé, et comme les autres propriétés sont identiques, la liste des violations doit être vide. Le test réussit si assertTrue(violations.isEmpty()) est vrai.
-
-
-
-
+10. Test : testComparePathsWithFakerGeneratedWeights
+    Intention : Confirmer que des poids très similaires (différence inférieure à la tolérance) ne causent pas d'erreur.
+    Données : Faker génère un poids de base et une différence minime, garantie d'être dans la marge de tolérance de la méthode.
+    Oracle : Le test vérifie que la liste des erreurs est vide, prouvant que la tolérance de la méthode fonctionne comme prévu.
