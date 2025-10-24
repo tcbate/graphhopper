@@ -132,28 +132,17 @@
     <version>5.20.0</version>
     <scope>test</scope>
 </dependency>
+<dependency>
+  <groupId>com.github.javafaker</groupId>
+  <artifactId>javafaker</artifactId>
+  <version>1.0.2</version>
+  <scope>test</scope>
+</dependency>
     </dependencies>
 
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-maven</artifactId>
-                    <version>LATEST</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.pitest</groupId>
-                            <artifactId>pitest-junit5-plugin</artifactId>
-                            <version>1.2.3</version>
-                        </dependency>
-                    </dependencies>
-                    <configuration>
-                        <targetClasses>
-                            <param>com.graphhopper.util.GHUtility*</param>
-                        </targetClasses>
-                    </configuration>
-                </plugin>
                 <!-- create jar with test classes to be reused in other projects -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -177,6 +166,49 @@
         </pluginManagement>
 
         <plugins>
+                <plugin>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-maven</artifactId>
+                    <version>1.21.0</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.pitest</groupId>
+                            <artifactId>pitest-junit5-plugin</artifactId>
+                            <version>1.2.3</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <argLine></argLine>
+                          <parseSurefireArgLine>false</parseSurefireArgLine>
+                        <jvmArgs>
+                            <jvmArg>-Xmx2g</jvmArg>
+                            <jvmArg>-Xms2g</jvmArg>
+                            <jvmArg>-XX:+UseG1GC</jvmArg>
+                            <jvmArg>-XshowSettings:vm</jvmArg>
+                        </jvmArgs>
+                        <timeoutConstant>4000</timeoutConstant>
+                        <timeoutFactor>1.25</timeoutFactor>
+                        <threads>2</threads>
+                        <historyInputFile>target/pit-history/pitestHistory.txt</historyInputFile> 
+                        <historyOutputFile>target/pit-history/pitestHistory.txt</historyOutputFile> 
+                        <targetClasses>
+                            <param>com.graphhopper.util.GHUtility*</param>
+                        </targetClasses>
+                        <outputFormats>
+                            <outputFormat>HTML</outputFormat>
+                            <outputFormat>XML</outputFormat>
+                            <outputFormat>CSV</outputFormat>
+                        </outputFormats>
+                        </configuration>
+                    <executions>
+                        <execution>
+                            <id>run-pitest</id>
+                            <goals>
+                                <goal>mutationCoverage</goal>
+                            </goals>
+                    </execution>
+                </executions>
+                </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
