@@ -38,11 +38,11 @@ jobs:
         exit 0
 
     - name: Load Artifact With Test Changes
-      if: env.TEST_CHANGES == true
+      if: env.TEST_CHANGES == 'true'
       run: echo Test Changes Detected
 
     - name: Load Artifact With no Test Changes
-      if: env.TEST_CHANGES == false
+      if: env.TEST_CHANGES == 'false'
       run: echo No Test Changes Detected 
             
     - name: Set up JDK 17
