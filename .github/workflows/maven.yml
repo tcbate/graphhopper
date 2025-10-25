@@ -37,9 +37,11 @@ jobs:
         fi
         exit 0
 
-    - name: Load artifact
+    - name: Load Artifact With Test Changes
       if: env.TEST_CHANGES == true
       run: echo Test Changes Detected
+
+    - name: Load Artifact With no Test Changes
       if: env.TEST_CHANGES == false
       run: echo No Test Changes Detected 
             
