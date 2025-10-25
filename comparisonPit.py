@@ -52,20 +52,24 @@ if __name__ == "__main__":
     #On écrit du code ici
     score1 = -1
     score2 = -1
-    with open("core/target/pit-reports/mutations.csv",newline="") as report:
-        report_parsed = csv.reader(report)
-        score1 = get_pit_score(report_parsed)
-    print("Score 1 : {:.2f}".format(score1))
+    try:
+        with open("core/target/pit-reports/mutations.csv",newline="") as report:
+            report_parsed = csv.reader(report)
+            score1 = get_pit_score(report_parsed)
+        print("Score 1 : {:.2f}".format(score1))
+    except FileNotFoundError:
+        score1 = 0
     resultat = os.system("mvn -pl core test-compile org.pitest:pitest-maven:mutationCoverage")
+    if resultat != 0:
+        print("Pitest a échoué")
+        sys.exit(1)
 
     with open("core/target/pit-reports/mutations.csv",newline="") as report2:
         report2_parsed = csv.reader(report2)
         score2 = get_pit_score(report2_parsed)
     print("Score 2 : {:.2f}".format(score2))
-    if score1 < score2:
-        print("Le score de mutataion à baissé... Il faut échouer")
+    if score1 > score2:
+        print("Le score de mutataion à baissé... Le build a donc échoué")
         sys.exit(1)
     else:
         sys.exit(0)
-
-
