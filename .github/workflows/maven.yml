@@ -28,7 +28,7 @@ jobs:
       continue-on-error: true
       run: |
         NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test || true)
-        if [NOMBRE_CHANGEMENTS -gt 0]; then
+        if [ "$NOMBRE_CHANGEMENTS" -gt 0 ]; then
           echo "Changement detecté dans les tests"
           echo "TEST_CHANGES=true">>$GITHUB_ENV
         else
