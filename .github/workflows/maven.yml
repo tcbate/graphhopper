@@ -22,12 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with: 
-          fetch-depth: 0
+          fetch-depth: 2
 
     - name: Changes to tests
       continue-on-error: true
       run: |
-        NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test || true)
+        NOMBRE_CHANGEMENTS=$(git diff HEAD~1 HEAD --name-only | grep -c Test || true)
         if [ "$NOMBRE_CHANGEMENTS" -gt 0 ]; then
           echo "Changement detecté dans les tests"
           echo "TEST_CHANGES=true">>$GITHUB_ENV
