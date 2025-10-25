@@ -74,7 +74,7 @@ class GHUtilityThomasTest {
         assertThrows(IllegalArgumentException.class, () -> GHUtility.getCommonNode(bg,2,3));
     }
 
-    @Disabled
+    @Test
     public void FindCommonNodeCycle() {
         assertThrows(IllegalArgumentException.class, () -> GHUtility.getCommonNode(bg,4,3));
     }
