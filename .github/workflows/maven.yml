@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name : Changes to tests
+    - name: Changes to tests
         run:|
              NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test)
              if NOMBRE_CHANGEMENTS -gt 0
