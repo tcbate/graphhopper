@@ -37,14 +37,24 @@ jobs:
         fi
         exit 0
 
-    - name: Load Artifact With Test Changes
-      if: env.TEST_CHANGES == 'true'
-      run: echo Test Changes Detected
+    - name: Load Pitest Report
+      continue-on-error: true
+      uses: actions/download-artifact@v5
+      with:
+        name: pit-report
+        path: core/target/pit-reports/
 
-    - name: Load Artifact With no Test Changes
+    - name: Load Pitest History
       if: env.TEST_CHANGES == 'false'
-      run: echo No Test Changes Detected 
+      continue-on-error: true
+      uses: actions/download-artifact@v5
+      with:
+        name: Pitest History
+        path: core/target/pit-history/
             
+    - name: Pitest scoring
+      run: python3 comparisonPit.py
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
