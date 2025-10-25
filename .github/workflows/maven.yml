@@ -21,6 +21,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with: 
+          fetch-depth=0
+
     - name: Changes to tests
       run: |
         NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test)
