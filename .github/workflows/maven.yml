@@ -21,13 +21,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name : Changes to tests
+        run:|
+             NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test)
+             if NOMBRE_CHANGEMENTS -gt 0
+             then
+             echo "Changement detecté dans les tests"
+             echo "TEST_CHANGES=true">>$GITHUB_ENV
+             else
+             echo "Aucune changement detecté dans les tests"
+             echo "TEST_CHANGES=false">>$GITHUB_ENV
+             fi
+            
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name : Télécharger artifacts
     
     - name: Build with Maven
       run: mvn -B package --file pom.xml
