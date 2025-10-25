@@ -36,6 +36,12 @@ jobs:
           echo "TEST_CHANGES=false">>$GITHUB_ENV
         fi
         exit 0
+
+    - name: Load artifact
+      if: env.TEST_CHANGES == true
+      run: echo Test Changes Detected
+      if: env.TEST_CHANGES == false
+      run: echo No Test Changes Detected 
             
     - name: Set up JDK 17
       uses: actions/setup-java@v4
