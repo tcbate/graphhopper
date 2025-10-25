@@ -24,13 +24,12 @@ jobs:
     - name: Changes to tests
       run: |
         NOMBRE_CHANGEMENTS=$(git diff --name-only | grep -c Test)
-        if NOMBRE_CHANGEMENTS -gt 0
-        then
-        echo "Changement detecté dans les tests"
-        echo "TEST_CHANGES=true">>$GITHUB_ENV
+        if [NOMBRE_CHANGEMENTS -gt 0]; then
+          echo "Changement detecté dans les tests"
+          echo "TEST_CHANGES=true">>$GITHUB_ENV
         else
-        echo "Aucune changement detecté dans les tests"
-        echo "TEST_CHANGES=false">>$GITHUB_ENV
+          echo "Aucune changement detecté dans les tests"
+          echo "TEST_CHANGES=false">>$GITHUB_ENV
         fi
             
     - name: Set up JDK 17
