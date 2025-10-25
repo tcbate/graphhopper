@@ -51,6 +51,9 @@ jobs:
       with:
         name: Pitest History
         path: core/target/pit-history/
+    
+    - name: Intall Graphhopper for Pitest Scoring
+      run: mvn install -DskipTests
             
     - name: Pitest scoring
       run: python3 comparisonPit.py
