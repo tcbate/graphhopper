@@ -64,7 +64,7 @@ class GHUtilityThomasTest {
         na = null;
     }
 
-    @Disabled
+    @Test
     public void FindCommonNodeNormal() {
         assertEquals(0, GHUtility.getCommonNode(bg, 1, 0));
     }
