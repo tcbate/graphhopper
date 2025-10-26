@@ -45,6 +45,7 @@ jobs:
       with:
         name: pit-report
         path: core/target/pit-reports/
+        workflow-conclusion: ""
 
     - name: Load Pitest History
       if: env.TEST_CHANGES == 'false'
