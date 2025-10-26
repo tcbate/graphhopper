@@ -64,17 +64,17 @@ class GHUtilityThomasTest {
         na = null;
     }
 
-    @Disabled
+    @Test
     public void FindCommonNodeNormal() {
         assertEquals(0, GHUtility.getCommonNode(bg, 1, 0));
     }
 
-    @Disabled
+    @Test
     public void FindCommonNodeDisconnected() {
         assertThrows(IllegalArgumentException.class, () -> GHUtility.getCommonNode(bg,2,3));
     }
 
-    @Disabled
+    @Test
     public void FindCommonNodeCycle() {
         assertThrows(IllegalArgumentException.class, () -> GHUtility.getCommonNode(bg,4,3));
     }
