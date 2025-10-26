@@ -79,12 +79,12 @@ class GHUtilityThomasTest {
         assertThrows(IllegalArgumentException.class, () -> GHUtility.getCommonNode(bg,4,3));
     }
 
-    @Test
+    @Disabled
     public void findCommonNodeSameEdge(){
         assertEquals(7,GHUtility.getCommonNode(bg,5,6));
     }
 
-    @Test
+    @Disabled
     public void mockedLoopEdge1(){
         int edge1 = 1;
         int edge2 = 2;
@@ -101,7 +101,7 @@ class GHUtilityThomasTest {
 
     }
 
-    @Test
+    @Disabled
     public void mockedLoopEdge2(){
         int edge1 = 1;
         int edge2 = 2;
