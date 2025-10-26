@@ -45,7 +45,7 @@ jobs:
       with:
         name: pit-report
         path: core/target/pit-reports/
-        workflow-conclusion: ""
+        workflow-conclusion: completed 
 
     - name: Load Pitest History
       if: env.TEST_CHANGES == 'false'
@@ -53,7 +53,8 @@ jobs:
       uses: dawidd6/action-download-artifact@v2
       with:
         name: pitest-history
-        path: core/target/pit-history/
+        path: core/target/pit-history/"
+        workflow-conclusion: completed 
     
     - name: Set up JDK 17
       uses: actions/setup-java@v4
