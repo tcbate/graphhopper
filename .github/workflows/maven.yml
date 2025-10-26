@@ -67,8 +67,7 @@ jobs:
     - name: Pitest scoring
       continue-on-error: true
       run: |
-        python3 comparisonPit.py
-        echo "ECHEC_PIT=$?" >> $GITHUB_ENV
+        python3 comparisonPit.py || echo "ECHEC_PIT=$?" >> $GITHUB_ENV
 
     - name: Save Pitest History Artifact
       uses: actions/upload-artifact@v4
