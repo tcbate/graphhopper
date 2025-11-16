@@ -33,8 +33,11 @@ import com.graphhopper.storage.BaseGraph;
 import com.graphhopper.storage.Graph;
 import com.graphhopper.storage.NodeAccess;
 import org.junit.jupiter.api.BeforeEach;
+import static org.mockito.Mockito.*;
+import com.graphhopper.routing.weighting.Weighting; 
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Peter Karich
@@ -239,4 +242,101 @@ public class GHUtilityTest {
             ") are very similar and within the 1.e-2 tolerance. Violations: " + violations);
         }
 
+    // TESTS AVEC MOCKS (Tâche 3) 
+    
+    /**
+     * Test de GHUtility.getNeighbors() avec EdgeIterator mocké
+     * Vérifie que la méthode retourne correctement l'ensemble des nœuds adjacents
+     */
+    @Test
+    public void testGetNeighborsWithMockedEdgeIterator() {
+        EdgeIterator mockedIterator = mock(EdgeIterator.class);
+
+        // Simule 3 itérations réussies, puis une fin d'itération
+        when(mockedIterator.next())
+            .thenReturn(true).thenReturn(true).thenReturn(true).thenReturn(false);
+
+        // Configure les IDs des nœuds adjacents retournés
+        when(mockedIterator.getAdjNode())
+            .thenReturn(10).thenReturn(20).thenReturn(30);
+
+        Set<Integer> neighbors = GHUtility.getNeighbors(mockedIterator);
+
+        assertEquals(3, neighbors.size(), "Devrait avoir excat 3 voisins");
+        assertTrue(neighbors.contains(10), "Devrait contenir le nœud 10");
+        assertTrue(neighbors.contains(20), "Devrait contenir le nœud 20");
+        assertTrue(neighbors.contains(30), "Devrait contenir le nœud 30");
+
+        // Vérifie que next() a été appelé 4 fois (3 true + 1 false)
+        verify(mockedIterator, times(4)).next();
+        verify(mockedIterator, times(3)).getAdjNode();
+    }
+
+    /**
+     * Test de GHUtility.calcWeightWithTurnWeight() avec Weighting et EdgeIteratorState mockés
+     * Vérifie que le poids total combine correctement le poids de l'arête et du virage
+     */
+    @Test
+    public void testCalcWeightWithTurnWeightUsingMocks() {
+        Weighting mockedWeighting = mock(Weighting.class);
+        EdgeIteratorState mockedEdge = mock(EdgeIteratorState.class);
+        
+        int prevEdgeId = 3; 
+
+        // Configure le mock pour retourner les IDs et nœuds nécessaires
+        when(mockedEdge.getEdge()).thenReturn(5);
+        when(mockedEdge.getBaseNode()).thenReturn(1);
+        when(mockedEdge.getAdjNode()).thenReturn(2);
+        
+        // Simule le poids de l'arête et du virage
+        when(mockedWeighting.calcEdgeWeight(mockedEdge, false)).thenReturn(50.0);
+        when(mockedWeighting.calcTurnWeight(prevEdgeId, 1, 5)).thenReturn(10.0);
+        
+        double totalWeight = GHUtility.calcWeightWithTurnWeight(
+            mockedWeighting, 
+            mockedEdge, 
+            false, 
+            prevEdgeId
+        );
+        
+        // Le poids total doit être la somme du poids de l'arête et du virage
+        assertEquals(60.0, totalWeight, 0.001, "Le poids total devrait être 60.0 (50.0 + 10.0)");
+        
+        verify(mockedWeighting, times(1)).calcEdgeWeight(mockedEdge, false);
+        verify(mockedWeighting, times(1)).calcTurnWeight(prevEdgeId, 1, 5);
+        verify(mockedEdge, atLeastOnce()).getEdge();
+    }
+
+    /**
+     * Test de GHUtility.calcWeightWithTurnWeight() avec prevEdgeId invalide
+     * Vérifie que le poids de virage n'est pas calculé au début du chemin (prevEdgeId = -1)
+     */
+    @Test
+    public void testCalcWeightWithTurnWeightNoPreviousEdge() {
+        Weighting mockedWeighting = mock(Weighting.class);
+        EdgeIteratorState mockedEdge = mock(EdgeIteratorState.class);
+        
+        int invalidPrevEdgeId = -1; // Pas d'arête précédente (début du chemin)
+        
+        when(mockedEdge.getEdge()).thenReturn(5);
+        when(mockedEdge.getBaseNode()).thenReturn(1);
+        when(mockedWeighting.calcEdgeWeight(mockedEdge, false)).thenReturn(50.0);
+        
+        double totalWeight = GHUtility.calcWeightWithTurnWeight(
+            mockedWeighting, 
+            mockedEdge, 
+            false, 
+            invalidPrevEdgeId
+        );
+        
+        // Seul le poids de l'arête doit être retourné (pas de poids de virage)
+        assertEquals(50.0, totalWeight, 0.001, 
+            "Le poids devrait être 50.0 (pas de virage pour prevEdgeId invalide)");
+        
+        verify(mockedWeighting, times(1)).calcEdgeWeight(mockedEdge, false);
+        // Vérifie que calcTurnWeight n'est jamais appelé avec prevEdgeId invalide
+        verify(mockedWeighting, never()).calcTurnWeight(anyInt(), anyInt(), anyInt());
+    }
+
 }
+
