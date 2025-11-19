@@ -86,14 +86,9 @@ jobs:
 
     - name: Rickroll on Failure 
       if: env.ECHEC_PIT != '0'
-      uses: thollander/actions-comment-pull-request@v2
+      uses: saratonin/random-rickroll@v1.0.1
       with:
-        message: |
-          Les tests ont échoué !
-          Alors...
-
-          ![Rickroll](https://media.giphy.com/media/10kABVanhwykJW/giphy.gif)
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        message: 'Les tests ont échoué !Alors.... https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
     - name: Fail if PIT failed
       if: env.ECHEC_PIT != '0'
