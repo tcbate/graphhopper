@@ -86,9 +86,9 @@ jobs:
 
     - name: Rickroll on Failure 
       if: env.ECHEC_PIT != '0'
-      uses: saratonin/random-rickroll@v1.0.1
-      with:
-        message: 'Les tests ont échoué !Alors.... https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      run: |
+        echo "Les tests ont échoué !Alors.... "
+        echo "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
     - name: Fail if PIT failed
       if: env.ECHEC_PIT != '0'
