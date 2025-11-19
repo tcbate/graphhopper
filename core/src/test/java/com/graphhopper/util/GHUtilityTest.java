@@ -262,7 +262,7 @@ public class GHUtilityTest {
 
         Set<Integer> neighbors = GHUtility.getNeighbors(mockedIterator);
 
-        assertEquals(999, neighbors.size(), "POUR TESTER RICKROLL REMETTRE À 3 !!");
+        assertEquals(3, neighbors.size(), "Devrait avoir excat 3 voisins");
         assertTrue(neighbors.contains(10), "Devrait contenir le nœud 10");
         assertTrue(neighbors.contains(20), "Devrait contenir le nœud 20");
         assertTrue(neighbors.contains(30), "Devrait contenir le nœud 30");

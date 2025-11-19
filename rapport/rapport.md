@@ -42,4 +42,8 @@ Mocks `Weighting` (retourne 50.0 pour le poids d'arête et 10.0 pour le poids de
 **Test 3 - `testCalcWeightWithTurnWeightNoPreviousEdge()` :**
 Mêmes mocks mais avec prevEdgeId=-1 (valeur invalide) pour tester le cas limite du début de chemin où aucun virage ne doit être calculé. Vérifie avec `verify(never())` que `calcTurnWeight()` n'est jamais appelé, résultat attendu = 50.0
 
+### Rickroll dans le CI
 
+Capture d'écran avec le rickroll qui s'affiche dans les logs GitHub Actions quand les tests échouent :
+
+![Rickroll dans les logs GitHub Actions](image.png)
