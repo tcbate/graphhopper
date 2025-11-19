@@ -19,6 +19,7 @@ jobs:
     permissions:
       actions: read
       contents: read
+      pull-requests: write  # permission pour ecrire des commentaires sur les PR
     runs-on: ubuntu-latest
 
     steps:
@@ -83,7 +84,17 @@ jobs:
         name: pit-report
         path: core/target/pit-reports/
 
+    - name: Rickroll on Failure 
+      if: env.ECHEC_PIT != '0'
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        message: |
+          Les tests ont échoué !
+          Alors...
+
+          ![Rickroll](https://media.giphy.com/media/10kABVanhwykJW/giphy.gif)
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Fail if PIT failed
       if: env.ECHEC_PIT != '0'
       run: exit 1
-
